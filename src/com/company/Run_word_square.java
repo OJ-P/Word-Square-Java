@@ -7,11 +7,11 @@ import java.util.*;
 
 public class Run_word_square {
     //================================================================================================//
-    private static TrieNode TrieNode = new TrieNode();
+    private static final TrieNode TrieNode = new TrieNode();
     //================================================================================================//
     public static void main(String[] args) throws IOException {
 
-        // Call function to load main menu.
+        // Call to load main menu.
         load_menu();
     }
     //================================================================================================//
@@ -28,7 +28,7 @@ public class Run_word_square {
         char[] inputArray = input.toCharArray();
 
         // first value has to be number and not zero.
-        if (Character.isDigit(inputArray[0]) == false || inputArray[0] == 0) {
+        if (!Character.isDigit(inputArray[0]) || inputArray[0] == 0) {
             System.out.println("invalid input. First character must be a number and not zero.");
             return false;
         }
@@ -42,7 +42,7 @@ public class Run_word_square {
 
         // All values in array other than the first have to be letters.
         for (int i = 1; i < inputLength; i++) {
-            if (Character.isLetter(inputArray[i]) == false) {
+            if (!Character.isLetter(inputArray[i])) {
                 System.out.println("invalid input. All characters after initial number must be letters.");
                 return false;
             }
@@ -53,7 +53,7 @@ public class Run_word_square {
     //================================================================================================//
     public static HashMap<String, Integer> create_dictionary() throws IOException {
 
-        HashMap<String, Integer> dictionary = new HashMap<String, Integer>();
+        HashMap<String, Integer> dictionary = new HashMap<>();
 
         // Open Buffered reader to read dictionary file.
         try (BufferedReader reader = new BufferedReader(new FileReader("dictionary.txt"))) {
@@ -74,7 +74,7 @@ public class Run_word_square {
         int numValue = Character.getNumericValue(inputArray[0]);
 
         // Create array list to fill with all the valid-length words from dictionary.
-        ArrayList<String> validWords = new ArrayList<String>();
+        ArrayList<String> validWords = new ArrayList<>();
 
         // Creates dictionary file.
         HashMap<String, Integer> dictionary = create_dictionary();
@@ -87,17 +87,17 @@ public class Run_word_square {
         }
 
         // Create array list to fill with all the usable words from the letters provided and dictionary.
-        ArrayList<String> usableWords = new ArrayList<String>();
+        ArrayList<String> usableWords = new ArrayList<>();
 
         // Create ArrayList from "inputArray" to use during population of ArrayList "usableWords" (as elements can be easily removed).
-        ArrayList<Character> inputArrayList = new ArrayList<Character>();
+        ArrayList<Character> inputArrayList = new ArrayList<>();
 
         // Counter to keep track of used letters.
         int count;
 
         // Populate array of usable words:
         // iterates through list of all valid words.
-        for (int d = 0; d < validWords.size(); d++) {
+        for (String validWord : validWords) {
 
             // populate array with available letters to create usable words from.
             inputArrayList.clear();
@@ -110,7 +110,7 @@ public class Run_word_square {
             for (int e = 0; e < (numValue); e++) {
 
                 // sets variable "letter" to the current character in the current valid word.
-                char letter = validWords.get(d).charAt(e);
+                char letter = validWord.charAt(e);
 
                 // iterates through list of valid letters against the current character of the current valid word.
                 for (int f = 0; f < (numValue * numValue); f++) {
@@ -128,7 +128,7 @@ public class Run_word_square {
                 // On last letter of word check if it is a valid usable word and if so add it to the array.
                 if (e == (numValue - 1)) {
                     if (count == numValue) {
-                        usableWords.add(validWords.get(d));
+                        usableWords.add(validWord);
                         inputArrayList.clear();
                     }
                 }
@@ -148,64 +148,60 @@ public class Run_word_square {
         String characters = new String(charArray);
 
         // Set usable words to regular array to send to word square method.
-        String[] wordsForSquare = usableWords.toArray(new String[usableWords.size()]);
+        String[] wordsForSquare = usableWords.toArray(new String[0]);
 
         // Call method to create all possible words squares with the usable words passed to it.
         List<List<String>> wordSquares = TrieNode.wordSquares(wordsForSquare);
 
         // Variables to hold words and count.
-        String square = "";
-        count = 0;
+        StringBuilder square = new StringBuilder();
 
         // Iterate through the list of possible word squares.
-        for (int s = 0; s  < wordSquares.size(); s++) {
-
-            // Iterate through each word in the current square.
-            for (int w = 0; w  < numValue; w++) {
+        // Iterate through each word in the current square.
+        for (List<String> wordSquare : wordSquares)
+            for (int w = 0; w < numValue; w++) {
 
                 // Build string of all words from current square.
-                square = square + wordSquares.get(s).get(w);
+                square.append(wordSquare.get(w));
 
                 // If all the words from current square are in the string.
                 if (square.length() == (numValue * numValue)) {
 
                     // Create sorted string to compare to sorted character string.
-                    char[] squareArray = square.toCharArray();
+                    char[] squareArray = square.toString().toCharArray();
                     Arrays.sort(squareArray);
-                    square = new String(squareArray);
+                    square = new StringBuilder(new String(squareArray));
 
                     // If all letters specified by user are used and both alphabetically sorted strings match it is a valid word square.
-                    if (characters.equals(square) == true) {
+                    if (characters.equals(square.toString())) {
                         System.out.println("Valid word square:");
-                        System.out.println("");
-                        for (int x = 0; x  < numValue; x++) {
-                            System.out.println(wordSquares.get(s).get(x));
+                        System.out.println();
+                        for (int x = 0; x < numValue; x++) {
+                            System.out.println(wordSquare.get(x));
                         }
                     }
 
                     // Reset String for the next word square.
-                    square = "";
+                    square = new StringBuilder();
                 }
 
             }
-        }
     }
     //================================================================================================//
-    public static ArrayList<Character> populateArray(ArrayList<Character> arrayToPopulate, int numValue, char[] inputArray) {
+    public static void populateArray(ArrayList<Character> arrayToPopulate, int numValue, char[] inputArray) {
 
         // Function to populate array list with allowed characters.
         for (int c = 1; c <= (numValue * numValue); c++) {
             arrayToPopulate.add(inputArray[c]);
-        } return arrayToPopulate;
+        }
     }
     //================================================================================================//
     public static void load_menu() throws IOException {
 
         // Prints out the main menu options.
-        int select = 0;
+        int select;
         Scanner scan = new Scanner(System.in);
-        while (select != 3) {
-
+        while (true) {
 
             System.out.println("Main Menu:");
             System.out.println("=====================");
@@ -223,12 +219,8 @@ public class Run_word_square {
                     System.out.println("This program creates a word square. To do this you must provide the program with specific input.");
                     System.out.println("You must provide an integer, which specifies how many rows and columns the square will have. Next");
                     System.out.println("this must be followed by a string of letters. The total amount of letters must be the same as the");
-                    System.out.println("integer squared. Example input:");
-                    System.out.println("");
-                    System.out.println("4 aaccdeeeemmnnnoo");
-                    System.out.println("");
-                    System.out.println("Press Enter to continue");
-                    System.in.read();
+                    System.out.println("integer squared. Example input:\n");
+                    System.out.println("4 aaccdeeeemmnnnoo\n");
                     break;
                 case 2:
                     // Get user input to create word square.
@@ -236,7 +228,7 @@ public class Run_word_square {
                     String userInput = scan.nextLine();
 
                     // Validate user input until true.
-                    while (validate_input(userInput) == false) {
+                    while (!validate_input(userInput)) {
                         System.out.println("Enter value to create word square...");
                         userInput = scan.nextLine();
                     }
@@ -248,16 +240,15 @@ public class Run_word_square {
                     // Call function to create the word square based on input given.
                     create_wordsquare(userInput);
 
-                    System.out.println("");
-                    System.out.println("Press Enter to continue");
-                    System.in.read();
+                    System.out.println("\nPress Enter to continue");
                     break;
                 case 3:
+                    scan.close();
                     System.exit(1);
                 default:
                     System.out.println("Enter valid Option.");
             }
-        } scan.close();
+        }
     }
 //================================================================================================//
 }
