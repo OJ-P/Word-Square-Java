@@ -43,7 +43,7 @@ public class Run_word_square {
         // All values in array other than the first have to be letters.
         for (int i = 1; i < inputLength; i++) {
             if (Character.isLetter(inputArray[i]) == false) {
-                System.out.println("invalid input. All characters after inital number must be letters.");
+                System.out.println("invalid input. All characters after initial number must be letters.");
                 return false;
             }
         }
@@ -51,19 +51,20 @@ public class Run_word_square {
         return true;
     }
     //================================================================================================//
-    public static HashMap<String, Integer> create_dictionary() throws IOException  {
+    public static HashMap<String, Integer> create_dictionary() throws IOException {
 
         HashMap<String, Integer> dictionary = new HashMap<String, Integer>();
 
         // Open Buffered reader to read dictionary file.
-        try(BufferedReader reader = new BufferedReader(new FileReader("dictionary.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("dictionary.txt"))) {
 
             // Populate Hash map with words and word lengths.
             String fileLine;
             while ((fileLine = reader.readLine()) != null) {
                 dictionary.put(fileLine, fileLine.length());
             }
-        } return dictionary;
+            return dictionary;
+        }
     }
     //================================================================================================//
     public static void create_wordsquare(String validInput) throws IOException {
