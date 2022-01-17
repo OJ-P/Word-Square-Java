@@ -6,15 +6,16 @@ import java.io.IOException;
 import java.util.*;
 
 public class Run_word_square {
-    //================================================================================================//
-    private static final TrieNode TrieNode = new TrieNode();
-    //================================================================================================//
-    public static void main(String[] args) throws IOException {
 
+    private static final TrieNode TrieNode = new TrieNode();
+
+
+    public static void main(String[] args) throws IOException {
         // Call to load main menu.
         load_menu();
     }
-    //================================================================================================//
+
+
     public static Boolean validate_input(String input) {
 
         // Set input to lower case and strip all white spaces from input.
@@ -50,7 +51,8 @@ public class Run_word_square {
         // If input is valid return function.
         return true;
     }
-    //================================================================================================//
+
+
     public static HashMap<String, Integer> create_dictionary() throws IOException {
 
         HashMap<String, Integer> dictionary = new HashMap<>();
@@ -66,7 +68,8 @@ public class Run_word_square {
             return dictionary;
         }
     }
-    //================================================================================================//
+
+
     public static void create_wordsquare(String validInput) throws IOException {
 
         // Create array from input and grab number value for word length.
@@ -107,26 +110,26 @@ public class Run_word_square {
             count = 0;
 
             // iterates through number of characters in each valid word.
-            for (int e = 0; e < (numValue); e++) {
+            for (int characters = 0; characters < (numValue); characters++) {
 
                 // sets variable "letter" to the current character in the current valid word.
-                char letter = validWord.charAt(e);
+                char letter = validWord.charAt(characters);
 
                 // iterates through list of valid letters against the current character of the current valid word.
-                for (int f = 0; f < (numValue * numValue); f++) {
+                for (int current_character = 0; current_character < (numValue * numValue); current_character++) {
 
                     // If the letter from the valid word matches the letter in the array iterate count, set that element to null and break out of loop.
-                    if (inputArrayList.get(f) != null) {
-                        if (inputArrayList.get(f) == letter) {
+                    if (inputArrayList.get(current_character) != null) {
+                        if (inputArrayList.get(current_character) == letter) {
                             count++;
-                            inputArrayList.set(f, null);
+                            inputArrayList.set(current_character, null);
                             break;
                         }
                     }
                 }
 
                 // On last letter of word check if it is a valid usable word and if so add it to the array.
-                if (e == (numValue - 1)) {
+                if (characters == (numValue - 1)) {
                     if (count == numValue) {
                         usableWords.add(validWord);
                         inputArrayList.clear();
@@ -180,14 +183,14 @@ public class Run_word_square {
                             System.out.println(wordSquare.get(x));
                         }
                     }
-
                     // Reset String for the next word square.
                     square = new StringBuilder();
                 }
 
             }
     }
-    //================================================================================================//
+
+
     public static void populateArray(ArrayList<Character> arrayToPopulate, int numValue, char[] inputArray) {
 
         // Function to populate array list with allowed characters.
@@ -195,7 +198,8 @@ public class Run_word_square {
             arrayToPopulate.add(inputArray[c]);
         }
     }
-    //================================================================================================//
+
+
     public static void load_menu() throws IOException {
 
         // Prints out the main menu options.
@@ -250,5 +254,4 @@ public class Run_word_square {
             }
         }
     }
-//================================================================================================//
 }
