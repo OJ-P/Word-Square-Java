@@ -7,13 +7,15 @@ public class TrieNode {
     // Instantiate array for characters and boolean for end of word.
     TrieNode[] characters;
     boolean isEnd;
-    //================================================================================================//
+
+
     public TrieNode() {
 
         // Initialise.
         this.characters = new TrieNode[26];
     }
-    //================================================================================================//
+
+
     public List<List<String>> wordSquares(String[] words) {
 
         TrieNode root = buildTrie(words);
@@ -26,7 +28,8 @@ public class TrieNode {
         }
         return squares;
     }
-    //================================================================================================//
+
+
     private TrieNode buildTrie(String[] words) {
 
         TrieNode root = new TrieNode();
@@ -43,7 +46,8 @@ public class TrieNode {
         }
         return root;
     }
-    //================================================================================================//
+
+
     private TrieNode search(TrieNode root, String prefix) {
 
         TrieNode current = root;
@@ -56,7 +60,8 @@ public class TrieNode {
         }
         return current;
     }
-    //================================================================================================//
+
+
     private void wordSquares(TrieNode root, int len, List<String> square, List<List<String>> squares) {
 
         if (square.size() == len) {
@@ -78,7 +83,8 @@ public class TrieNode {
             square.remove(square.size() - 1);
         }
     }
-    //================================================================================================//
+
+
     private String getPrefix(List<String> square, int index) {
 
         StringBuilder sb = new StringBuilder();
@@ -87,7 +93,8 @@ public class TrieNode {
         }
         return sb.toString();
     }
-    //================================================================================================//
+
+
     private void getChildren(TrieNode node, String s, List<String> children) {
 
         if (node.isEnd) {
@@ -101,5 +108,4 @@ public class TrieNode {
             }
         }
     }
-//================================================================================================//
 }
