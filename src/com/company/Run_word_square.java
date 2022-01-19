@@ -16,56 +16,58 @@ public class Run_word_square {
     }
 
 
-    public static Boolean validate_input(String input) {
+    public static void load_menu() throws IOException {
 
-        // Set input to lower case and strip all white spaces from input.
-        input = input.toLowerCase();
-        input = input.replaceAll("\\s+","");
+        // Prints out the main menu options.
+        int select;
+        Scanner scan = new Scanner(System.in);
+        while (true) {
 
-        // Create variable set to length of input.
-        int inputLength = input.length();
+            System.out.println("Main Menu:");
+            System.out.println("=====================");
+            System.out.println("1. Instructions");
+            System.out.println("2. Create word square");
+            System.out.println("3. Quit");
+            System.out.println("=====================");
+            System.out.println("Enter choice to proceed:");
 
-        // Create char array from input string.
-        char[] inputArray = input.toCharArray();
+            select = scan.nextInt();
+            scan.nextLine();
 
-        // first value has to be number and not zero.
-        if (!Character.isDigit(inputArray[0]) || inputArray[0] == 0) {
-            System.out.println("invalid input. First character must be a number and not zero.");
-            return false;
-        }
+            switch (select) {
+                case 1:
+                    System.out.println("This program creates a word square. To do this you must provide the program with specific input.");
+                    System.out.println("You must provide an integer, which specifies how many rows and columns the square will have. Next");
+                    System.out.println("this must be followed by a string of letters. The total amount of letters must be the same as the");
+                    System.out.println("integer squared. Example input:\n");
+                    System.out.println("4 aaccdeeeemmnnnoo\n");
+                    break;
+                case 2:
+                    // Get user input to create word square.
+                    System.out.println("Enter value to create word square...");
+                    String userInput = scan.nextLine();
 
-        // Input length has equal the value of first number squared.
-        int numValue = Character.getNumericValue(inputArray[0]);
-        if ((inputLength - 1) != numValue * numValue) {
-            System.out.println("invalid input. You must enter the correct number of characters.");
-            return false;
-        }
+                    // Validate user input until true.
+                    while (!validate_input(userInput)) {
+                        System.out.println("Enter value to create word square...");
+                        userInput = scan.nextLine();
+                    }
 
-        // All values in array other than the first have to be letters.
-        for (int i = 1; i < inputLength; i++) {
-            if (!Character.isLetter(inputArray[i])) {
-                System.out.println("invalid input. All characters after initial number must be letters.");
-                return false;
+                    // Sanitise input.
+                    userInput = userInput.toLowerCase();
+                    userInput = userInput.replaceAll("\\s+","");
+
+                    // Call function to create the word square based on input given.
+                    create_wordsquare(userInput);
+
+                    System.out.println("\nPress Enter to continue");
+                    break;
+                case 3:
+                    scan.close();
+                    System.exit(1);
+                default:
+                    System.out.println("Enter valid Option.");
             }
-        }
-        // If input is valid return function.
-        return true;
-    }
-
-
-    public static HashMap<String, Integer> create_dictionary() throws IOException {
-
-        HashMap<String, Integer> dictionary = new HashMap<>();
-
-        // Open Buffered reader to read dictionary file.
-        try (BufferedReader reader = new BufferedReader(new FileReader("dictionary.txt"))) {
-
-            // Populate Hash map with words and word lengths.
-            String fileLine;
-            while ((fileLine = reader.readLine()) != null) {
-                dictionary.put(fileLine, fileLine.length());
-            }
-            return dictionary;
         }
     }
 
@@ -191,6 +193,60 @@ public class Run_word_square {
     }
 
 
+    public static HashMap<String, Integer> create_dictionary() throws IOException {
+
+        HashMap<String, Integer> dictionary = new HashMap<>();
+
+        // Open Buffered reader to read dictionary file.
+        try (BufferedReader reader = new BufferedReader(new FileReader("dictionary.txt"))) {
+
+            // Populate Hash map with words and word lengths.
+            String fileLine;
+            while ((fileLine = reader.readLine()) != null) {
+                dictionary.put(fileLine, fileLine.length());
+            }
+            return dictionary;
+        }
+    }
+
+
+    public static Boolean validate_input(String input) {
+
+        // Set input to lower case and strip all white spaces from input.
+        input = input.toLowerCase();
+        input = input.replaceAll("\\s+","");
+
+        // Create variable set to length of input.
+        int inputLength = input.length();
+
+        // Create char array from input string.
+        char[] inputArray = input.toCharArray();
+
+        // first value has to be number and not zero.
+        if (!Character.isDigit(inputArray[0]) || inputArray[0] == 0) {
+            System.out.println("invalid input. First character must be a number and not zero.");
+            return false;
+        }
+
+        // Input length has equal the value of first number squared.
+        int numValue = Character.getNumericValue(inputArray[0]);
+        if ((inputLength - 1) != numValue * numValue) {
+            System.out.println("invalid input. You must enter the correct number of characters.");
+            return false;
+        }
+
+        // All values in array other than the first have to be letters.
+        for (int i = 1; i < inputLength; i++) {
+            if (!Character.isLetter(inputArray[i])) {
+                System.out.println("invalid input. All characters after initial number must be letters.");
+                return false;
+            }
+        }
+        // If input is valid return function.
+        return true;
+    }
+
+
     public static void populateArray(ArrayList<Character> arrayToPopulate, int numValue, char[] inputArray) {
 
         // Function to populate array list with allowed characters.
@@ -200,58 +256,5 @@ public class Run_word_square {
     }
 
 
-    public static void load_menu() throws IOException {
 
-        // Prints out the main menu options.
-        int select;
-        Scanner scan = new Scanner(System.in);
-        while (true) {
-
-            System.out.println("Main Menu:");
-            System.out.println("=====================");
-            System.out.println("1. Instructions");
-            System.out.println("2. Create word square");
-            System.out.println("3. Quit");
-            System.out.println("=====================");
-            System.out.println("Enter choice to proceed:");
-
-            select = scan.nextInt();
-            scan.nextLine();
-
-            switch (select) {
-                case 1:
-                    System.out.println("This program creates a word square. To do this you must provide the program with specific input.");
-                    System.out.println("You must provide an integer, which specifies how many rows and columns the square will have. Next");
-                    System.out.println("this must be followed by a string of letters. The total amount of letters must be the same as the");
-                    System.out.println("integer squared. Example input:\n");
-                    System.out.println("4 aaccdeeeemmnnnoo\n");
-                    break;
-                case 2:
-                    // Get user input to create word square.
-                    System.out.println("Enter value to create word square...");
-                    String userInput = scan.nextLine();
-
-                    // Validate user input until true.
-                    while (!validate_input(userInput)) {
-                        System.out.println("Enter value to create word square...");
-                        userInput = scan.nextLine();
-                    }
-
-                    // Sanitise input.
-                    userInput = userInput.toLowerCase();
-                    userInput = userInput.replaceAll("\\s+","");
-
-                    // Call function to create the word square based on input given.
-                    create_wordsquare(userInput);
-
-                    System.out.println("\nPress Enter to continue");
-                    break;
-                case 3:
-                    scan.close();
-                    System.exit(1);
-                default:
-                    System.out.println("Enter valid Option.");
-            }
-        }
-    }
 }
