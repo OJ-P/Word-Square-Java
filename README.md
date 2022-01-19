@@ -1,5 +1,5 @@
-# Word-Square-Java
-# word square challenge for a coding interview in 2019
+Word-Square-Java
+word square challenge for a coding interview in 2019
 
 
 Coding Challenge
