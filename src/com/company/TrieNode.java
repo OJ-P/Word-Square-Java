@@ -16,7 +16,7 @@ public class TrieNode {
     }
 
 
-    public List<List<String>> wordSquares(String[] words) {
+    public List<List<String>> wordSquares(String[] words) {  //runs first - takes list of words
 
         TrieNode root = buildTrie(words);
         List<List<String>> squares = new ArrayList<>();
